@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Car Viewer Ultimate</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Search Styles */
+        .controls-container {
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #3498db;
+        }
+
+        .compare-btn {
+            background-color: #2ecc71;
+        }
+
+        /* Green for Compare */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .content {
+            padding: 15px;
+        }
+
+        .specs {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .view-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* NEW: Checkbox Styles */
+        .select-checkbox {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            accent-color: #2ecc71;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Showroom Inventory</h1>
+
+    <div class="controls-container">
+        <form action="/" method="GET" style="display:flex; gap:10px;">
+            <input type="text" name="q" class="search-box" placeholder="Search (e.g., Sedan, BMW)..."
+                value="{{.Query}}">
+            <button type="submit" class="btn search-btn">Search</button>
+            <a href="/" class="btn" style="background:#95a5a6;">Clear</a>
+        </form>
+    </div>
+
+    <form action="/compare" method="GET">
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button type="submit" class="btn compare-btn">Compare Selected Cars</button>
+        </div>
+
+        <div class="grid">
+            {{range .Cars}}
+            <div class="card">
+                <input type="checkbox" name="id" value="{{.ID}}" class="select-checkbox">
+
+                <img src="http://localhost:3000/api/images/{{.Image}}" alt="{{.Name}}">
+                <div class="content">
+                    <h2>{{.Name}}</h2>
+                    <div class="specs">
+                        <p><strong>Year:</strong> {{.Year}}</p>
+                        <p><strong>Engine:</strong> {{.Specifications.Engine}}</p>
+                    </div>
+                    <a href="/car?id={{.ID}}" class="view-btn">View Details</a>
+                </div>
+            </div>
+            {{else}}
+            <p style="text-align: center; grid-column: 1/-1;">No cars found.</p>
+            {{end}}
+        </div>
+    </form>
+
+</body>
+
+</html>
